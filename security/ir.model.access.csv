@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_create,perm_read,perm_write,perm_unlink
+access_todo_task,access_todo_task,model_todo_task,,1,1,1,1
+access_timesheet_lines,access_timesheet_lines,model_timesheet_lines,,1,1,1,1

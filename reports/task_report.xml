@@ -1,0 +1,52 @@
+<odoo>
+    <!-- Report Action Definition -->
+    <record id="action_report_todo_task" model="ir.actions.report">
+        <field name="name">Todo Task Report</field>
+        <field name="model">todo.task</field>
+        <field name="report_type">qweb-pdf</field> <!-- Default PDF type -->
+        <field name="binding_model_id" ref="model_todo_task"/>
+        <field name="binding_type">report</field>
+        <field name="report_name">to_do_list.report_todo_task</field>
+    </record>
+
+    <!-- Styled QWeb Template for Todo Task Report -->
+    <template id="report_todo_task">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+
+                <!-- Loop through tasks -->
+                <t t-foreach="docs" t-as="o">
+                    <div class="border p-4 mb-4 rounded shadow-sm">
+                        <h2 class="text-secondary border-bottom pb-2 mb-3">Task: <t t-esc="o.name"/></h2>
+                        <p><strong>Assigned To:</strong> <span class="text-primary"><t t-esc="o.partner_id.name or 'N/A'"/></span></p>
+                        <p><strong>Description:</strong> <span class="text-muted"><t t-esc="o.description or 'No description'"/></span></p>
+                        <p><strong>Due Date:</strong> <span class="text-muted"><t t-esc="o.due_date.strftime('%Y-%m-%d') if o.due_date else 'No due date'"/></span></p>
+                        <p><strong>Estimated Time:</strong> <span class="text-muted"><t t-esc="o.estimated_time or 0"/> hours</span></p>
+
+                        <!-- Timesheets Table -->
+                        <h3 class="text-secondary mt-4">Timesheets</h3>
+                        <table class="table table-bordered mt-2">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="p-2">Start Date</th>
+                                    <th class="p-2">Description</th>
+                                    <th class="p-2 text-end">Time (hours)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.timesheet_ids" t-as="timesheet">
+                                    <tr>
+                                        <td class="p-2"><t t-esc="timesheet.start_date.strftime('%Y-%m-%d') if timesheet.start_date else 'N/A'"/></td>
+                                        <td class="p-2"><t t-esc="timesheet.des or 'No description'"/></td>
+                                        <td class="p-2 text-end"><t t-esc="timesheet.time or 0"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <p class="text-end mt-3"><strong>Total Time:</strong> <span class="text-muted"><t t-esc="o.total_time or 0"/> hours</span></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

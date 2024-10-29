@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+
+        <!-- Action for To-Do Tasks -->
+        <record id="to_do_action" model="ir.actions.act_window">
+            <field name="name">To-Do</field>
+            <field name="res_model">todo.task</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Root Menu for To-Do -->
+        <menuitem name="To-Do"
+                  id="to_do_menu_root"
+                  sequence="10"
+                  web_icon="to_do_list,static/description/icon.png"
+                  />
+
+        <!-- Submenu under To-Do Root -->
+        <menuitem name="To-Do List" 
+                  parent="to_do_menu_root"   
+                  id="to_do_list_menu"
+                  sequence="10"/>
+
+        <!-- All Tasks Menu Item with Action -->
+        <menuitem name="All Tasks"
+                  parent="to_do_list_menu"     
+                  id="to_do_task_menu"
+                  action="to_do_action"
+                  sequence="10"/>    
+
+    </data>
+</odoo>

@@ -1,0 +1,139 @@
+<odoo>
+    <data>
+
+        <!-- Form View -->
+        <record id="to_do_form_view" model="ir.ui.view">
+            <field name="name">to_do_form</field>
+            <field name="model">todo.task</field>
+            <field name="arch" type="xml">
+                <form string="To-Do Task">
+                    <header>
+                        <field name="status" widget="statusbar" statusbar_visible="new,progress,completed"/>
+                     
+
+                        <button name="action_start_progress" type="object" string="Start Progress" class="oe_highlight btn-primary" 
+                                invisible="status != 'new'"/>
+                     
+                        <button name="action_mark_completed" type="object" string="Mark Completed" class="oe_highlight btn-info" 
+                                invisible="status != 'progress'"/>
+
+
+                                <button name="action_reset_to_new" type="object" string="Reset to New" class="oe_highlight btn-secondary" 
+                                invisible="status != 'progress' and status != 'draft'"/>
+                        
+
+                        <button name="action_reset_to_progress" type="object" string="Reset to Progress" class="oe_highlight btn-warning" 
+                                invisible="status != 'completed'"/>
+                                
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="partner_id"/>
+                                <field name="due_date"/>
+                            </group>
+                           
+                                
+                          
+                       
+                        <group>
+                            <field name="description"/>
+                            <field name="estimated_time"/>
+                            
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <separator string="Timesheet Details" colspan="4"/>
+
+                    <notebook>
+                        <page string="Timesheet">
+                            <field name="timesheet_ids" context="{'default_task_id': active_id}">
+                                <tree editable="bottom">
+                                    <field name="des" string="Description"/>
+                                    <field name="start_date" string="Start Date"/>
+                                    <field name="time" string="Time"/>
+                                </tree>
+                            </field>
+                            
+                            <group name="note_group" class="mt-2 mt-md-0">
+                                <group class="oe_subtotal_footer">
+                                    <!-- Change the widget to a more appropriate one, like float_time or just a standard field -->
+                                    <field name="total_time" widget="float_time" readonly="1"/>
+                                </group>
+                                <div class="clearfix"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    
+                        
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="to_do_tree_view" model="ir.ui.view">
+            <field name="name">to_do_tree</field>
+            <field name="model">todo.task</field>
+            <field name="arch" type="xml">
+                <tree  
+                decoration-danger="(is_late)"
+                decoration-success="status == 'completed'" 
+                decoration-info="status == 'new'" class="header_custom">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="status"/>
+                    <field name="due_date"/>
+                    <field name="is_late" invisible="1"/>  <!-- Make it invisible -->
+                </tree>
+            </field>
+        </record>
+        
+
+
+<!-- 
+        <record id="closed_action_server" model="ir.actions.server">
+            <field name="name">Closed</field>
+            <field name="model_id" ref="model_todo_task" />
+            <field name="binding_model_id" ref="model_todo_task" />
+            <field name="state">code</field>
+            <field name="code">
+               action = records.action_to_closed()
+            </field>
+        </record>
+         -->
+
+        <record id="to_do_search_view" model="ir.ui.view">
+            <field name="name">to_do_search</field>
+            <field name="model">todo.task</field>
+            <field name="arch" type="xml">
+              <search>
+                <field name="name" />
+                <field name="partner_id" />
+                
+                <filter name="status_new" string="New" domain="[('status', '=', 'new')]"/>
+                <filter name="status_progress" string="In Progress" domain="[('status', '=', 'progress')]"/>
+                <filter name="status_completed" string="Completed" domain="[('status', '=', 'completed')]"/>
+                <group expand="0" string="Group by">
+                    <filter name="group_by_status" string="Status" context="{'group_by': 'status'}"/>
+                    <filter name="group_by_partner" string="Assigned To" context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_by_due_date" string="Due Date" context="{'group_by': 'due_date'}"/>
+                </group>
+
+              </search>
+            </field>
+        </record>
+
+
+
+
+
+
+    </data>
+</odoo>
